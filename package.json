@@ -2,6 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "tw": "npx tailwindcss -i ./resources/css/tailwind.css -o ./resources/css/dist/build.css --watch",
         "build": "vite build",
         "dev": "vite"
     },
@@ -11,7 +12,11 @@
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.47",
-        "tailwindcss": "^3.4.13",
+        "tailwindcss": "^3.4.17",
         "vite": "^6.0"
+    },
+    "dependencies": {
+        "@vitejs/plugin-vue": "^5.2.1",
+        "vue": "^3.5.13"
     }
 }
