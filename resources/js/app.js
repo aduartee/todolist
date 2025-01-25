@@ -1,10 +1,12 @@
 import './bootstrap';
+import '../css/dist/build.css';
+import axios from 'axios';
 import { createApp } from 'vue';
 import App from '../components/App.vue';
 import Menu from '../components/Menu.vue';
-import '../css/dist/build.css';
 
+window.axios = axios;
 const app = createApp();
 app.component('app', App);
-app.component('main-menu', Menu)
+app.component('main-menu', Menu);
 app.mount('#app');
