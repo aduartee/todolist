@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
     return view('home');
@@ -11,7 +12,7 @@ Route::get('/task', function() {
     return view('tasks');
 });
 
-Route::post('/task/register', [TaskController::class, 'registerNewTask']);
+Route::post('/task/create', [TaskController::class, 'createNewTask']);
 
 Route::post('/task/list', [TaskController::class, 'fetchAllTask']);
 

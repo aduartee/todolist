@@ -51,22 +51,20 @@
         setup() {
             const tasksArray = ref([]);
             const inputValue = ref('');
-            const registerTaskEndPointUrl = 'http://127.0.0.1:8000/task/resgiter';
+            // const registerTaskEndPointUrlLocal = "http://locahost:8000/task/create";
+            const registerTaskEndPointUrlLocal = 'http://localhost:8000/task/create';
 
-            const handleClick = () => {
+            const handleClick = async () => {
                 if(inputValue.value.trim() != "") {
+                    await axios.get("http://localhost:8000/sanctum/csrf-cookie");
+
                     const taskData = {
                         'name' : inputValue.value,
-                        'createdAt' : new Date().toISOString
+                        'createdAt': new Date().toISOString(),
                     };
 
                     try {
-                        axios.post({
-                            url: registerTaskEndPointUrl,
-                            params: { 
-                                taskData
-                            }
-                        });
+                        await axios.post("http://localhost:8000/task/create", taskData);
                     } catch(error) {
                         console.error(error);
                     }
