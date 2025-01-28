@@ -52,19 +52,18 @@
             const tasksArray = ref([]);
             const inputValue = ref('');
             // const registerTaskEndPointUrlLocal = "http://locahost:8000/task/create";
-            const registerTaskEndPointUrlLocal = 'http://localhost:8000/task/create';
+            const registerTaskEndPointUrlLocal = 'http://127.0.0.1:8000/task/create';
 
             const handleClick = async () => {
                 if(inputValue.value.trim() != "") {
-                    await axios.get("http://localhost:8000/sanctum/csrf-cookie");
-
                     const taskData = {
                         'name' : inputValue.value,
                         'createdAt': new Date().toISOString(),
                     };
 
                     try {
-                        await axios.post("http://localhost:8000/task/create", taskData);
+                        await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie');
+                        await axios.post(registerTaskEndPointUrlLocal, taskData);
                     } catch(error) {
                         console.error(error);
                     }
