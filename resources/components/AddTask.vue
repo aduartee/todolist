@@ -51,6 +51,7 @@
         setup() {
             const tasksArray = ref([]);
             const inputValue = ref('');
+            let response;
             // const registerTaskEndPointUrlLocal = "http://locahost:8000/task/create";
             const registerTaskEndPointUrlLocal = 'http://127.0.0.1:8000/task/create';
 
@@ -63,7 +64,8 @@
 
                     try {
                         await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie');
-                        await axios.post(registerTaskEndPointUrlLocal, taskData);
+                        response = await axios.post(registerTaskEndPointUrlLocal, taskData);
+                        console.log(response);
                     } catch(error) {
                         console.error(error);
                     }
