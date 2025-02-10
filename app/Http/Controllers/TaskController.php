@@ -22,11 +22,12 @@ class TaskController extends Controller
                 ]
             );
 
-            Task::create($dataValidate);
+            $taskInstance = Task::create($dataValidate);
+            EmailJob::dispatch(TaskController::email, $taskInstance);
 
             return response()->json([
                 'message' => 'success',
-                'requestData' => $dataValidate
+                'requestData' => $taskInstance
             ], 200);
 
         } catch (ValidationException $validationException) {
