@@ -22,9 +22,10 @@ class TaskCreatedMail extends Mailable
         $this->task = $task;
     }
 
+    // Build email using the data task and using view to send e-mail content
    public function build() {
-    return $this->subject('Tarefa criada')
-            ->view('emails.created_task')
-            ->with(['task' => $this->task]);
-   }
+        return $this->subject('Tarefa criada')
+                ->view('emails.created_task')
+                ->with(['task' => $this->task]);
+    }
 }

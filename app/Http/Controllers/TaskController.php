@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EmailJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Task;
@@ -9,6 +10,7 @@ use Dotenv\Exception\ValidationException;
 
 class TaskController extends Controller
 {
+    const email = 'arthurduartealves99@gmail.com';
     public function createNewTask(Request $request): JsonResponse
     {
         error_log($request);
@@ -26,6 +28,7 @@ class TaskController extends Controller
                 'message' => 'success',
                 'requestData' => $dataValidate
             ], 200);
+
         } catch (ValidationException $validationException) {
             return response()->json([
                 'title' => 'error',

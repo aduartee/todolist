@@ -4,9 +4,9 @@ namespace App\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Mail;
 use  App\Mail\TaskCreatedMail;
 use App\Models\Task;
-use Mail;
 
 class EmailJob implements ShouldQueue
 {
@@ -26,6 +26,6 @@ class EmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        // Mail::to($this->email)->send(new TaskCreatedMail($this->task));
+        Mail::to($this->email)->send(new TaskCreatedMail($this->task));
     }
 }
