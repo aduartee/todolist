@@ -1,84 +1,59 @@
 <template>
-    <div class="mt-10 flex flex-row p-2 w-11/12">
-        <input type="text" name="taskName" v-model="inputValue" id="taskName" class="block min-w-0 grow py-1.5 h-20 rounded pl-1 pr-3 text-base text-gray-900 placeholder:text-white bg-neutral-400 focus:outline focus:outline-0 md:text-md/6" placeholder="Play Guitar">
-        <button type="button" @click="handleClick" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 ms-3 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Task</button>
-    </div>
+    <div class="mt-10 p-2 flex flex-col w-8/12 mx-auto">
+        <div class="flex flex-col w-full">
+            <label for="taskName" class="">Task</label>
+            <input type="text" name="taskName" v-model="taskName" id="taskName"
+                class="block w-full py-1.5 h-12 rounded pl-1 pr-3 text-base text-gray-900 placeholder:text-white bg-neutral-400 focus:outline focus:outline-0 md:text-md/6"
+                placeholder="Play Guitar">
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-20">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3 w-10">
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Task Name
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        <div class="flex items-center">
-                            Date<a href="#"></a>
-                        </div>
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        <span class="sr-only">Edit</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="(item, index) in tasksArray" :key="item">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <input id="vue-checkbox-list" :value="index" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                    </th>
-                    <td class="px-6 py-4">
-                        {{ item.name }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ item.createdAt }}
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="flex flex-col w-full mt-10">
+                <label for="taskDescription">Description</label>
+                <input type="text" name="taskDescription" v-model="taskDescription" id="taskDescription"
+                    class="block w-full py-1.5 h-12 rounded pl-1 pr-3 text-base text-gray-900 placeholder:text-white bg-neutral-400 focus:outline focus:outline-0 md:text-md/6"
+                    placeholder="Play guitar every Monday">
+
+                <button type="button" @click="handleClick"
+                    class="text-white w-5/12 mt-10 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Add Task
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
-    import {ref} from 'vue';
+import axios from 'axios';
+import { ref } from 'vue';
 
-    export default {
-        setup() {
-            const tasksArray = ref([]);
-            const inputValue = ref('');
-            let response;
-            // const registerTaskEndPointUrlLocal = "http://locahost:8000/task/create";
-            const registerTaskEndPointUrlLocal = 'http://127.0.0.1:8000/task/create';
+export default {
+    setup() {
+        const taskName = ref('');
+        const taskDescription = ref('');
+        let response;
+        const registerTaskEndPointUrlLocal = 'http://127.0.0.1:8000/task/create';
 
-            const handleClick = async () => {
-                if(inputValue.value.trim() != "") {
-                    const taskData = {
-                        'name' : inputValue.value,
-                        'createdAt': new Date().toISOString(),
-                    };
+        const handleClick = async () => {
+            if (taskName.value.trim() != "") {
+                const taskData = {
+                    'name': taskName.value,
+                    'description': taskDescription.value,
+                };
 
-                    try {
-                        await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie');
-                        response = await axios.post(registerTaskEndPointUrlLocal, taskData);
-                        console.log(response);
-                    } catch(error) {
-                        console.error(error);
-                    }
+                try {
+                    await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie');
+                    response = await axios.post(registerTaskEndPointUrlLocal, taskData);
+                } catch (error) {
+                    console.error(error);
+                }
 
-                    inputValue.value = '';
-                } 
-            };
-
-            return {
-                tasksArray,
-                inputValue,
-                handleClick
+                taskName.value = '';
             }
+        };
+        return {
+            taskName,
+            taskDescription,
+            handleClick
         }
     }
+}
 </script>

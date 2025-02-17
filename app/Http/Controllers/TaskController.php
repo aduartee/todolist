@@ -4,26 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Jobs\EmailJob;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Dotenv\Exception\ValidationException;
 
 class TaskController extends Controller
 {
-    const email = 'arthurduartealves99@gmail.com';
-    public function createNewTask(Request $request): JsonResponse
+    protected const email = 'arthurduartealves99@gmail.com';
+
+    /**
+     * Mount the correct data to send inside of a response
+     * @param <int, Task> $taskFromModel
+     * 
+     * @return array|mixed
+     */
+    private function mounTaskData($taskFromModel) {
+        return $taskFromModel->map(function ($task) {
+            return [
+                'id' => $task->id,
+                'name' => $task->name,
+                'description' => $task->description,
+                'completed' => $task->completed
+            ];
+        });
+    }
+
+    public function createNewTask(TaskRequest $request): JsonResponse
     {
-        error_log($request);
-
         try {
-            $dataValidate = $request->validate(
-                [
-                    'name' => 'required|string|max:255'
-                ]
-            );
+            $dataValidate = $request->validated();
 
+            // error_log(print_r($dataValidate, true));
             $taskInstance = Task::create($dataValidate);
-            EmailJob::dispatch(TaskController::email, $taskInstance);
+            EmailJob::dispatch(TaskController::email, $taskInstance)->onQueue('email');
 
             return response()->json([
                 'message' => 'success',
@@ -38,19 +51,23 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * fetch All tasks from database, without any filter or condicion.
+     * @return JsonResponse|mixed
+     */
     public function fetchAllTasks(): JsonResponse
     {
-        $dataFromDatabase = Task::all();
+        $dataFromDatabase = Task::orderBy('created_at', 'desc')->get();
         if ($dataFromDatabase->isEmpty()) {
             return response()->json([
                 'message' => 'error',
-                'data' => []
+                'tasks' => []
             ], 404);
         }
 
         return response()->json([
             'message' => 'success',
-            'data' => $dataFromDatabase,
+            'tasks' => $this->mounTaskData($dataFromDatabase),
         ], 200);
     }
 }
