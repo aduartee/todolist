@@ -14,4 +14,4 @@ Route::get('/task', function() {
 
 Route::post('/task/create', [TaskController::class, 'createNewTask']);
 
-Route::post('/task/list', [TaskController::class, 'fetchAllTasks']);
+Route::get('/task/list', [TaskController::class, 'fetchAllTasks']);
